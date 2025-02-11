@@ -1,5 +1,5 @@
 ﻿using HotelBooking.Models;
-using HotelBooking.Repositories;
+using HotelBooking.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBooking.Controllers
@@ -8,14 +8,12 @@ namespace HotelBooking.Controllers
     [Route("[controller]")]
     public class RoomSearchController : ControllerBase
     {
-        private readonly IRoomRepository _roomRepository;
-        private readonly IBookingRepository _bookingRepository;
+        private readonly IBookingService _bookingService;
         private readonly ILogger<RoomSearchController> _logger;
 
-        public RoomSearchController(IRoomRepository roomRepository, IBookingRepository bookingRepository, ILogger<RoomSearchController> logger)
+        public RoomSearchController(IBookingService bookingService, ILogger<RoomSearchController> logger)
         {
-            _roomRepository = roomRepository;
-            _bookingRepository = bookingRepository;
+            _bookingService = bookingService;
             _logger = logger;
         }
 
@@ -23,12 +21,7 @@ namespace HotelBooking.Controllers
         public ActionResult<List<Room>> FindRooms(int hotelId, int numberOfPeople, DateTime startDate, DateTime endDate)
         {
             //Find available rooms on this date by querying existing bookings
-            var rooms = _roomRepository.GetRooms(hotelId, numberOfPeople);
-
-            var existingBookings = _bookingRepository.GetBookings(startDate, endDate, rooms);
-
-            var bookedRoomIds = existingBookings.Select(b => b.Room.Id).ToList();
-            var availableRooms = rooms.Where(r => !bookedRoomIds.Contains(r.Id)).ToList();
+            var availableRooms = _bookingService.GetAvailableRooms(hotelId, numberOfPeople, startDate, endDate);
 
             return new ActionResult<List<Room>>(availableRooms);
         }
