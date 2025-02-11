@@ -17,6 +17,8 @@ builder.Services.AddDbContext<HotelBookingContext>(options =>
 
 //IOC Setup
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+
 
 var app = builder.Build();
 
