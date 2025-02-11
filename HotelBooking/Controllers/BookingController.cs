@@ -36,7 +36,7 @@ namespace HotelBooking.Controllers
             try
             {
                 var bookingRef = _bookingService.MakeBooking(request);
-                return Ok();
+                return Ok(bookingRef);
             }
             catch (Exception ex)
             {

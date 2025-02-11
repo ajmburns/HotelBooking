@@ -8,6 +8,7 @@ namespace HotelBooking.Controllers
     [Route("[controller]")]
     public class HotelController : ControllerBase
     {
+
         private readonly IHotelRepository _hotelRepository;
         private readonly ILogger<HotelController> _logger;
 
@@ -24,9 +25,9 @@ namespace HotelBooking.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Hotel>> GetAll()
+        public ActionResult<List<Hotel>> GetList(int page = 0)
         {
-            return _hotelRepository.GetAll();
+            return _hotelRepository.GetList(page);
         }
     }
 }

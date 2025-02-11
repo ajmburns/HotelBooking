@@ -6,12 +6,12 @@ namespace HotelBooking.Repositories
     {
         Hotel GetHotel(int id);
 
-        List<Hotel> GetAll();
+        List<Hotel> GetList(int page = 0);
 
         void AddHotel(Hotel hotel);
 
         void DeleteAll();
 
-        List<Hotel> SearchHotels(string searchText);
+        List<Hotel> SearchHotels(string searchText, int page = 0);
     }
 }

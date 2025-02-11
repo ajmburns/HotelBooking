@@ -18,9 +18,9 @@ namespace HotelBooking.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Hotel>> FindHotels(string searchText)
+        public ActionResult<List<Hotel>> FindHotels(string searchText, int page = 0)
         {
-            return _hotelRepository.SearchHotels(searchText);
+            return _hotelRepository.SearchHotels(searchText, page);
         }
     }
 }

@@ -6,6 +6,8 @@ namespace HotelBooking.Repositories
 {
     public class HotelRepository : IHotelRepository
     {
+        private const int PageSize = 5;
+
         private readonly HotelBookingContext _context;
 
         public HotelRepository(HotelBookingContext context)
@@ -21,7 +23,16 @@ namespace HotelBooking.Repositories
                 .FirstOrDefault();
         }
 
-        public List<Hotel> GetAll()
+        public List<Hotel> GetList(int page = 0)
+        {
+            return _context.Hotels
+                .Include(h => h.Rooms)
+                .Skip(page * PageSize)
+                .Take(PageSize)
+                .ToList();
+        }
+
+        private List<Hotel> GetAll()
         {
             return _context.Hotels
                 .Include(h => h.Rooms)
@@ -36,6 +47,11 @@ namespace HotelBooking.Repositories
 
         public void DeleteAll()
         {
+            foreach (var booking in _context.Bookings)
+            {
+                _context.Bookings.Remove(booking);
+            }
+
             foreach (var hotel in GetAll())
             {
                 foreach (var room in hotel.Rooms)
@@ -47,11 +63,13 @@ namespace HotelBooking.Repositories
             _context.SaveChanges();
         }
 
-        public List<Hotel> SearchHotels(string searchText)
+        public List<Hotel> SearchHotels(string searchText, int page = 0)
         {
             return _context.Hotels
-                .Where(h => EF.Functions.Like(h.Name, $"{searchText}%"))
+                .Where(h => EF.Functions.Like(h.Name, $"%{searchText}%"))
                 .Include(h => h.Rooms)
+                .Skip(page * PageSize)
+                .Take(PageSize)
                 .ToList();
         }
     }
