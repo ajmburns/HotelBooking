@@ -20,6 +20,12 @@ namespace HotelBooking.Controllers
         [HttpGet]
         public ActionResult<List<Hotel>> FindHotels(string searchText, int page = 0)
         {
+            //Minimum search characters check
+            if (string.IsNullOrEmpty(searchText) || searchText.Length < 3)
+            {
+                return new List<Hotel>();
+            }
+
             return _hotelRepository.SearchHotels(searchText, page);
         }
     }
