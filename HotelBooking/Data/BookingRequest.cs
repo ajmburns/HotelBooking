@@ -30,7 +30,7 @@
                     && !String.IsNullOrWhiteSpace(CustomerName)
                     && !String.IsNullOrWhiteSpace(PaymentReference)
                     && StartDate.Date >= DateTime.Today.Date
-                    && StartDate.Date < EndDate.Date;
+                    && StartDate.Date <= EndDate.Date;
             }
         }
     }
