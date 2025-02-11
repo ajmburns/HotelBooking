@@ -25,6 +25,12 @@ namespace HotelBooking.Services
 
         public List<Room> GetAvailableRooms(int hotelId, int numberOfPeople, DateTime startDate, DateTime endDate)
         {
+            //No rooms available in the past
+            if (startDate.Date < DateTime.Today || endDate.Date < DateTime.Today)
+            {
+                return new List<Room>();
+            }
+
             //Find available rooms on this date by querying existing bookings
             var rooms = _roomRepository.GetRooms(hotelId, numberOfPeople);
             var existingBookings = _bookingRepository.GetBookings(startDate, endDate, rooms);

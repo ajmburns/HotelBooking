@@ -85,6 +85,27 @@ namespace HotelBookingApi.Test.Services
         }
 
         [TestMethod]
+        public void GetAvailableRooms_WhereSearchingForPastDate_ReturnNoRooms()
+        {
+            var requestedStartDate = DateTime.Today.AddDays(-12);
+            var requestedEndDate = DateTime.Today.AddDays(-7);
+            var rooms = new List<Room>() { new RoomBuilder().WithId(21).WithCapacity(1).Build(), new RoomBuilder().WithId(22).WithCapacity(2).Build(), };
+            var hotel = new Hotel { Id = 1, Name = "Plaza", Rooms = rooms };
+            var bookings = new List<Booking>()
+            {
+                new Booking {Hotel = hotel, Id = "b1", Name = "Archie", PaymentReference="p1", Room = rooms[1], StartDate=requestedStartDate.AddDays(1), EndDate=requestedStartDate.AddDays(-1), NumberOfPeople = 1},
+            };
+
+            _hotelRepository.Setup(r => r.GetHotel(It.IsAny<int>())).Returns(hotel);
+            _roomRepository.Setup(r => r.GetRooms(It.IsAny<int>(), It.IsAny<int>())).Returns(rooms);
+            _bookingRepository.Setup(r => r.GetBookings(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<List<Room>>())).Returns(bookings);
+
+            var result = _service.GetAvailableRooms(hotel.Id, 1, requestedStartDate, requestedEndDate);
+
+            result.Count.Should().Be(0);
+        }
+
+        [TestMethod]
         public void MakeBooking_WhereAttemptToDoubleBookRoom_BookingRejected()
         {
             var requestedStartDate = DateTime.Today.AddDays(2);
