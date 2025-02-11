@@ -13,10 +13,13 @@ namespace HotelBooking.Data
 
         public DbSet<Room> Rooms { get; set; }
 
+        public DbSet<Booking> Bookings { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Hotel>().ToTable("Hotel");
             modelBuilder.Entity<Room>().ToTable("Room");
+            modelBuilder.Entity<Booking>().ToTable("Booking");
         }
     }
 }
