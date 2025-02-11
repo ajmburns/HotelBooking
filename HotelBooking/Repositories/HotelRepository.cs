@@ -46,5 +46,13 @@ namespace HotelBooking.Repositories
             }
             _context.SaveChanges();
         }
+
+        public List<Hotel> SearchHotels(string searchText)
+        {
+            return _context.Hotels
+                .Where(h => EF.Functions.Like(h.Name, $"{searchText}%"))
+                .Include(h => h.Rooms)
+                .ToList();
+        }
     }
 }

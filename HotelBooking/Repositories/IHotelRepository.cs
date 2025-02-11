@@ -11,5 +11,7 @@ namespace HotelBooking.Repositories
         void AddHotel(Hotel hotel);
 
         void DeleteAll();
+
+        List<Hotel> SearchHotels(string searchText);
     }
 }

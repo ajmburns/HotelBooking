@@ -18,7 +18,6 @@ namespace HotelBooking.Repositories
             return _context.Rooms.Where(r => r.Id == roomId).FirstOrDefault();
         }
 
-
         public List<Room> GetRooms(int hotelId, int numberOfPeople)
         {
             var hotel = _context.Hotels.Include(h => h.Rooms).Where(h => h.Id == hotelId).FirstOrDefault();
